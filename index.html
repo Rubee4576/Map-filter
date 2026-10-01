@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Records</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f7f8fc;
+            color: #222;
+        }
+
+        .navbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+            border-bottom: 1px solid #eee;
+        }
+
+        .navbar h2 {
+            font-size: 18px;
+        }
+
+        .login-btn {
+            border: none;
+            background: #eef0ff;
+            color: #4936d9;
+            padding: 10px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 1100px;
+            margin: 45px auto;
+        }
+
+        .search-area {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            width: 300px;
+            padding: 14px 16px;
+            border: none;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            outline: none;
+            font-size: 15px;
+        }
+
+        .search-btn {
+            border: none;
+            background: #4936d9;
+            color: white;
+            padding: 0 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .search-btn:hover {
+            background: #3927bd;
+        }
+
+        #studentContainer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .student-card {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            min-height: 170px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+
+        .student-card p {
+            margin-bottom: 16px;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .student-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .student-card strong {
+            color: #333;
+        }
+
+        .no-result {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 800px) {
+            #studentContainer {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 550px) {
+            .container {
+                width: 92%;
+            }
+
+            .search-area {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .search-btn {
+                height: 45px;
+            }
+
+            #studentContainer {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <h2>Hi, Suvrana</h2>
+        <button class="login-btn">Login</button>
+    </header>
+
+    <main class="container">
+
+        <div class="search-area">
+            <input
+                type="text"
+                id="searchInput"
+                class="search-box"
+                placeholder="Search Students..."
+            >
+            <button id="searchButton" class="search-btn">Search</button>
+        </div>
+
+        <div id="studentContainer"></div>
+
+    </main>
+
+    <script>
+        // Array of student objects
+        const students = [
+            {
+                name: "Salman Ahmed",
+                marks: "38%",
+                class: "3rd",
+                address: "India"
+            },
+            {
+                name: "Riya Sharma",
+                marks: "85%",
+                class: "10th",
+                address: "123, ABC Colony, Delhi"
+            },
+            {
+                name: "Rohan Patel",
+                marks: "70%",
+                class: "12th",
+                address: "456, XYZ Street, Mumbai"
+            },
+            {
+                name: "Priya Singh",
+                marks: "95%",
+                class: "6th",
+                address: "789, PQR Nagar, Bangalore"
+            },
+            {
+                name: "Ankit Gupta",
+                marks: "80%",
+                class: "9th",
+                address: "101, LMN Road, Kolkata"
+            },
+            {
+                name: "Neha Verma",
+                marks: "80%",
+                class: "8th",
+                address: "222, DEF Avenue, Chennai"
+            },
+            {
+                name: "Manoj Kumar",
+                marks: "75%",
+                class: "10th",
+                address: "55, Park Street, Pune"
+            },
+            {
+                name: "Pooja Mishra",
+                marks: "88%",
+                class: "12th",
+                address: "44, Green Park, Jaipur"
+            },
+            {
+                name: "Nikhil Singhania",
+                marks: "82%",
+                class: "9th",
+                address: "77, MG Road, Hyderabad"
+            }
+        ];
+
+        const studentContainer = document.getElementById("studentContainer");
+        const searchInput = document.getElementById("searchInput");
+        const searchButton = document.getElementById("searchButton");
+
+        // Map function: creates HTML cards for students
+        function displayStudents(studentList) {
+            if (studentList.length === 0) {
+                studentContainer.innerHTML =
+                    '<div class="no-result">No student found.</div>';
+                return;
+            }
+
+            studentContainer.innerHTML = studentList.map(student => `
+                <div class="student-card">
+                    <p><strong>Student Name:</strong> ${student.name}</p>
+                    <p><strong>Marks:</strong> ${student.marks}</p>
+                    <p><strong>Class:</strong> ${student.class}</p>
+                    <p><strong>Address:</strong> ${student.address}</p>
+                </div>
+            `).join("");
+        }
+
+        // Filter function: filters students by name
+        function searchStudents() {
+            const searchText = searchInput.value.toLowerCase().trim();
+
+            const filteredStudents = students.filter(student =>
+                student.name.toLowerCase().includes(searchText)
+            );
+
+            displayStudents(filteredStudents);
+        }
+
+        // Real-time search while typing
+        searchInput.addEventListener("input", searchStudents);
+
+        // Search button also performs the search
+        searchButton.addEventListener("click", searchStudents);
+
+        // Display all students when the page loads
+        displayStudents(students);
+    </script>
+
+</body>
+</html>
